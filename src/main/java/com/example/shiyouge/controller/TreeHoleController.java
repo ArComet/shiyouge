@@ -121,7 +121,7 @@ public class TreeHoleController {
     /**
      * 用户写评论
      * @param params 用户ID + 帖子ID + 评论内容
-     * @return 状态：created 或 wrong
+     * @return 状态：created 或 wrong 或 silented
      */
     @RequestMapping(value = "/createComment", method = RequestMethod.POST)
     public String createComment(@RequestBody Map<String, Object> params) {
@@ -130,7 +130,13 @@ public class TreeHoleController {
         String content = params.get("content").toString();
         Date date = new Date();
         Timestamp createTime =  new Timestamp(date.getTime());
+        Timestamp endSilentTime = userService.getTheEndSilentTime(userId);
         JSONObject json = new JSONObject();
+        //如果用户禁言时间还未结束
+        if (createTime.before(endSilentTime)){
+            json.put("status", "silented");
+            return json.toString();
+        }
         try {
             //在数据库创建评论信息
             commentService.createTheNewComment(userId, postId, content, createTime);
@@ -176,7 +182,7 @@ public class TreeHoleController {
     /**
      * 用户写帖子
      * @param params 用户ID + 评论内容 + 分区
-     * @return 状态：created 或 wrong
+     * @return 状态：created 或 wrong 或 silented
      */
     @RequestMapping(value = "/createPost", method = RequestMethod.POST)
     public String createPost(@RequestBody Map<String, Object> params) {
@@ -185,7 +191,13 @@ public class TreeHoleController {
         int partition = Integer.parseInt(params.get("partition").toString());
         Date date = new Date();
         Timestamp createTime =  new Timestamp(date.getTime());
+        Timestamp endSilentTime = userService.getTheEndSilentTime(userId);
         JSONObject json = new JSONObject();
+        //如果用户禁言时间还未结束
+        if (createTime.before(endSilentTime)){
+            json.put("status", "silented");
+            return json.toString();
+        }
         try {
             //在数据库创建评论
             postService.createThePost(userId, content, partition, createTime);

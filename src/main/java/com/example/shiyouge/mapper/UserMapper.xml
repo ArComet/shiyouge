@@ -166,4 +166,12 @@
     <update id="setUserTag">
         update user set label = #{usersTags} where userId = #{userId}
     </update>
+
+    <select id="getTheEndSilentTime" resultType="java.sql.Timestamp">
+        select endSilentTime from user where userId = #{userId}
+    </select>
+
+    <update id="setTheEndSilentTime">
+        update user set endSilentTime = #{endSilentTime} where userId = #{userId}
+    </update>
 </mapper>

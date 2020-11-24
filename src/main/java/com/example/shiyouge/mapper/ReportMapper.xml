@@ -71,14 +71,6 @@
         select postIdOfReport from report
     </select>
 
-    <select id="getPostContnetByPostId" resultType="String">
-        select postContent from post where postId = #{postIdOfReport}
-    </select>
-
-    <select id="getReportTimesByPostId" resultType="int">
-        select reportTimes from post where postId = #{postIdOfReport}
-    </select>
-
     <select id="getReportTypeByPostId" resultType="java.lang.String">
         select vulgar,sensitiviry, illegal, advertisement, virus, others
         from report where postIdOfReport = #{postIdOfReport}
@@ -87,4 +79,8 @@
     <select id="getTheReportByPostId" resultMap="BaseResultMap">
         select * from report where postIdOfReport = #{postIdOfReport}
     </select>
+
+    <delete id="deleteTheReportByPostId">
+        delete from report where postIdOfReport = #{postId}
+    </delete>
 </mapper>

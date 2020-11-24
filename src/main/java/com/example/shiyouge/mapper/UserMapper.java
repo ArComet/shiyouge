@@ -3,6 +3,7 @@ package com.example.shiyouge.mapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 @Mapper
@@ -234,4 +235,18 @@ public interface UserMapper {
      * @param usersTags 用户兴趣标签
      */
     void setUserTag(String userId, String usersTags);
+
+    /**
+     * 得到用户结束禁言时间
+     * @param userId 用户ID
+     * @return 结束禁言时间
+     */
+    Timestamp getTheEndSilentTime(String userId);
+
+    /**
+     * 设置用户结束禁言时间
+     * @param userId 用户ID
+     * @param endSilentTime 结束禁言时间
+     */
+    void setTheEndSilentTime(@Param("userId") String userId, @Param("endSilentTime") Timestamp endSilentTime);
 }

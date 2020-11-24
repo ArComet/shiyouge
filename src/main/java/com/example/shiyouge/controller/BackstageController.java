@@ -8,12 +8,15 @@ import com.example.shiyouge.service.AdminService;
 import com.example.shiyouge.service.PostService;
 import com.example.shiyouge.service.ReportService;
 import com.example.shiyouge.service.UserService;
+import com.example.shiyouge.utils.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -87,11 +90,12 @@ public class BackstageController {
             JSONArray jsonArray = new JSONArray();
             List<Integer> postIdsOfReport = reportService.getPostIdOfReport();
             for (int postIdOfReport : postIdsOfReport) {
+                Post thePost = postService.getPostByPostId(postIdOfReport);
                 JSONObject json2 = new JSONObject();
                 json2.put("postIdOfReport", postIdOfReport);
-                String postContent = reportService.getPostContnetByPostId(postIdOfReport);
+                String postContent = thePost.getPostContent();
                 json2.put("postContent", postContent);
-                int reportTimes = reportService.getReportTimesByPostId(postIdOfReport);
+                int reportTimes = thePost.getReportTimes();
                 json2.put("reportTimes", reportTimes);
                 JSONObject json3 = new JSONObject();
                 Report report = reportService.getTheReportByPostId(postIdOfReport);
@@ -120,6 +124,8 @@ public class BackstageController {
         int postId = Integer.parseInt(params.get("postId").toString());
         JSONObject json = new JSONObject();
         if(postService.deletePostByPostId(postId) == 1) {
+            //删除举报记录
+            reportService.deleteReportByPostId(postId);
             json.put("status", "succeed");
         }
         else {
@@ -138,6 +144,8 @@ public class BackstageController {
          int postId = Integer.parseInt(params.get("postId").toString());
          JSONObject json = new JSONObject();
          if (postService.reportedCancel(postId) >= 1) {
+             //删除举报记录
+             reportService.deleteReportByPostId(postId);
              json.put("status", "succeed");
          }
          else {
@@ -154,8 +162,13 @@ public class BackstageController {
     @RequestMapping(value = "/silent", method = RequestMethod.POST)
     public String silentUser(@RequestBody Map<String, Object> params) {
         String userId = params.get("userId").toString();
+        Date date = new Date();
+        date = DateUtil.goToDayChange(1, date);
+        Timestamp endSilentTime =  new Timestamp(date.getTime());
         JSONObject json = new JSONObject();
         if (userService.silent(userId) >= 1) {
+            //用户结束禁言时间的设置
+            userService.setTheEndSilentTime(userId, endSilentTime);
             json.put("status", "succeed");
         }
         else {

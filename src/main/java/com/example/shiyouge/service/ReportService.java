@@ -74,20 +74,6 @@ public class ReportService {
     public List<Integer> getPostIdOfReport() { return reportMapper.getPostIdOfReport();}
 
     /**
-     * 获得被举报帖子的内容
-     * @param postIdOfReport 被举报帖子的ID
-     * @return 被举报帖子的内容
-     */
-    public String getPostContnetByPostId(int postIdOfReport) { return reportMapper.getPostContnetByPostId(postIdOfReport);}
-
-    /**
-     * 获得被举报帖子的被举报次数
-     * @param postIdOfReport 被举报帖子的ID
-     * @return 被举报帖子的次数
-     */
-    public int getReportTimesByPostId(int postIdOfReport) {return reportMapper.getReportTimesByPostId(postIdOfReport);}
-
-    /**
      * 获得被举报帖子的被举报类型
      * @param postIdOfReport 被举报帖子的ID
      * @return 被举报帖子的举报类型
@@ -101,5 +87,13 @@ public class ReportService {
      */
     public Report getTheReportByPostId(int postIdOfReport){
         return reportMapper.getTheReportByPostId(postIdOfReport);
+    }
+
+    /**
+     * 删除记录
+     * @param postId 帖子ID
+     */
+    public void deleteReportByPostId(int postId){
+        reportMapper.deleteTheReportByPostId(postId);
     }
 }

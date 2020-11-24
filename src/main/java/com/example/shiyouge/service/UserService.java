@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 @Service
@@ -299,4 +300,22 @@ public class UserService {
      * @return 状态：succeed
      */
     public int silent(String userId) { return userMapper.silent(userId);}
+
+    /**
+     * 得到用户结束禁言时间
+     * @param userId 用户ID
+     * @return 结束禁言时间
+     */
+    public Timestamp getTheEndSilentTime(String userId){
+        return userMapper.getTheEndSilentTime(userId);
+    }
+
+    /**
+     * 设置用户结束禁言时间
+     * @param userId 用户ID
+     * @param endSilentTime 结束禁言时间
+     */
+    public void setTheEndSilentTime(String userId, Timestamp endSilentTime){
+        userMapper.setTheEndSilentTime(userId, endSilentTime);
+    }
 }
