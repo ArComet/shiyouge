@@ -185,7 +185,7 @@ public interface UserMapper {
      * @return 状态：succeed
      */
 
-    int silent(int userId);
+    int silent(String userId);
 
     /**
      * 退出宿舍
